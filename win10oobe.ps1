@@ -23,6 +23,9 @@ Write-Host -ForegroundColor DarkGray "Executing Product Key Script"
 #Start-Process PowerShell -ArgumentList "-NoL -C Invoke-WebPSScript https://raw.githubusercontent.com/AkosBakos/OSDCloud/main/Install-EmbeddedProductKey.ps1" -Wait
 
 Write-Host -ForegroundColor DarkGray "Executing Product Clean Logs"
+Start-Process PowerShell -ArgumentList "-NoL -C Invoke-WebPSScript https://raw.githubusercontent.com/cloudsolutiongmbh/pal/refs/heads/main/windows_update.ps1" -Wait
+
+Write-Host -ForegroundColor DarkGray "Executing Product Clean Logs"
 Start-Process PowerShell -ArgumentList "-NoL -C Invoke-WebPSScript https://raw.githubusercontent.com/cloudsolutiongmbh/pal/refs/heads/main/cleanlogs.ps1" -Wait
 
 
