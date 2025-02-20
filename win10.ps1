@@ -1,5 +1,5 @@
 # Initialize
-$ScriptVersion = '19062023_en-us'
+$ScriptVersion = '20-02-2025'
 if ($env:SystemDrive -eq 'X:') { $WindowsPhase = 'WinPE' }
 else {
     $ImageState = (Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Setup\State' -ErrorAction Ignore).ImageState
@@ -23,22 +23,21 @@ if ((Get-MyComputerModel) -match 'Virtual') {
 }
 
 #Write-Host -ForegroundColor Green "Updating OSD PowerShell Module"
-#Install-Module OSD -Force
+Install-Module OSD -Force
 
 #Write-Host  -ForegroundColor Green "Importing OSD PowerShell Module"
-#Import-Module OSD -Force   
+Import-Module OSD -Force   
 
 
 #   [OS] Params and Start-OSDCloud
 $Params = @{
-    #OSVersion = "Windows 11"
     OSVersion = "Windows 10"
-    #OSBuild = "22H2"
+    OSBuild = "22H2"
     OSEdition = "Enterprise"
-    OSLanguage = "en-us"
+    OSLanguage = "de-de"
     OSLicense = "Volume"
     ZTI = $true
-    Firmware = $true
+    Firmware = $false
 }
 Start-OSDCloud @Params
 
@@ -64,11 +63,9 @@ $OOBEDeployJson = @'
                     "Microsoft.Messaging",
                     "Microsoft.MicrosoftOfficeHub",
                     "Microsoft.MicrosoftSolitaireCollection",
-                    "Microsoft.MicrosoftStickyNotes",
-                    "Microsoft.MSPaint",
+                    "Microsoft.MicrosoftStickyNotes",                    
                     "Microsoft.People",
-                    "Microsoft.PowerAutomateDesktop",
-                    "Microsoft.StorePurchaseApp",
+                    "Microsoft.PowerAutomateDesktop",                    
                     "Microsoft.Todos",
                     "microsoft.windowscommunicationsapps",
                     "Microsoft.WindowsFeedbackHub",
@@ -102,14 +99,12 @@ Write-Host -ForegroundColor Green "Create C:\Windows\System32\OOBE.cmd"
 $OOBECMD = @'
 PowerShell -NoL -Com Set-ExecutionPolicy RemoteSigned -Force
 Set Path = %PATH%;C:\Program Files\WindowsPowerShell\Scripts
-Start /Wait PowerShell -NoL -C Invoke-WebPSScript https://gist.githubusercontent.com/Athlete-ITSolutions/3828c14c6b5c2816af11681f7c1da9ad/raw/SetDNSservers.ps1
 Start /Wait PowerShell -NoL -C Install-Module AutopilotOOBE -Force -Verbose
 Start /Wait PowerShell -NoL -C Install-Module OSD -Force -Verbose
 Start /Wait PowerShell -NoL -C Start-AutopilotOOBE
 Start /Wait PowerShell -NoL -C Start-OOBEDeploy
-Start /Wait PowerShell -NoL -C Invoke-WebPSScript https://gist.githubusercontent.com/Athlete-ITSolutions/31a5beca0adbf36243368cdbb2d0b162/raw/Setkeyboardlanguage.ps1
-Start /Wait PowerShell -NoL -C Invoke-WebPSScript https://gist.githubusercontent.com/Athlete-ITSolutions/655c77804a61981c552fc3df89dbe487/raw/WindowsActivation.ps1
-Start /Wait PowerShell -NoL -C Invoke-WebPSScript https://gist.githubusercontent.com/Athlete-ITSolutions/4453b13ec59edc4d22104dc91f7ff7ce/raw/LogCleanup.ps1
+Start /Wait PowerShell -NoL -C Invoke-WebPSScript https://raw.githubusercontent.com/cloudsolutiongmbh/pal/refs/heads/main/setkeyboard.ps1
+Start /Wait PowerShell -NoL -C Invoke-WebPSScript https://raw.githubusercontent.com/cloudsolutiongmbh/pal/refs/heads/main/cleanlogs.ps1
 Start /Wait PowerShell -NoL -C Restart-Computer -Force
 '@
 $OOBECMD | Out-File -FilePath 'C:\Windows\System32\OOBE.cmd' -Encoding ascii -Force
@@ -119,7 +114,7 @@ $OOBECMD | Out-File -FilePath 'C:\Windows\System32\OOBE.cmd' -Encoding ascii -Fo
 Write-Host -ForegroundColor Green "Create C:\Windows\Setup\Scripts\SetupComplete.cmd"
 $SetupCompleteCMD = @'
 powershell.exe -Command Set-ExecutionPolicy RemoteSigned -Force
-powershell.exe -Command "& {IEX (IRM https://gist.githubusercontent.com/Athlete-ITSolutions/593b558dab9880f628cd86bf42b5f8fa/raw)}"
+#powershell.exe -Command "& {IEX (IRM https://gist.githubusercontent.com/Athlete-ITSolutions/593b558dab9880f628cd86bf42b5f8fa/raw)}"
 '@
 $SetupCompleteCMD | Out-File -FilePath 'C:\Windows\Setup\Scripts\SetupComplete.cmd' -Encoding ascii -Force
 
