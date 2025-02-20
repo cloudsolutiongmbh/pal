@@ -25,10 +25,6 @@ Write-Host -ForegroundColor DarkGray "Executing Product Key Script"
 Write-Host -ForegroundColor DarkGray "Executing Product Clean Logs"
 Start-Process PowerShell -ArgumentList "-NoL -C Invoke-WebPSScript https://raw.githubusercontent.com/cloudsolutiongmbh/pal/refs/heads/main/cleanlogs.ps1" -Wait
 
-# Cleanup scheduled Tasks
-Write-Host -ForegroundColor DarkGray "Unregistering Scheduled Tasks"
-Unregister-ScheduledTask -TaskName "Scheduled Task for SendKeys" -Confirm:`$false
-Unregister-ScheduledTask -TaskName "Scheduled Task for OSDCloud post installation" -Confirm:`$false
 
 Write-Host -ForegroundColor DarkGray "Restarting Computer"
 Start-Process PowerShell -ArgumentList "-NoL -C Restart-Computer -Force" -Wait
@@ -37,25 +33,3 @@ Stop-Transcript -Verbose | Out-File
 "@
 
 Out-File -FilePath $ScriptPathOOBE -InputObject $OOBEScript -Encoding ascii
-
-$SendKeysScript = @"
-`$Global:Transcript = "`$((Get-Date).ToString('yyyy-MM-dd-HHmmss'))-SendKeys.log"
-Start-Transcript -Path (Join-Path "`$env:ProgramData\Microsoft\IntuneManagementExtension\Logs\OSD\" `$Global:Transcript) -ErrorAction Ignore | Out-Null
-
-Write-Host -ForegroundColor DarkGray "Stop Debug-Mode (SHIFT + F10) with WscriptShell.SendKeys"
-`$WscriptShell = New-Object -com Wscript.Shell
-
-# ALT + TAB
-Write-Host -ForegroundColor DarkGray "SendKeys: ALT + TAB"
-`$WscriptShell.SendKeys("%({TAB})")
-
-Start-Sleep -Seconds 1
-
-# Shift + F10
-Write-Host -ForegroundColor DarkGray "SendKeys: SHIFT + F10"
-`$WscriptShell.SendKeys("+({F10})")
-
-Stop-Transcript -Verbose | Out-File
-"@
-
-Out-File -FilePath $ScriptPathSendKeys -InputObject $SendKeysScript -Encoding ascii
