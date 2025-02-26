@@ -22,6 +22,8 @@ If (Test-Path -Path 'C:\OSDCloud') { Remove-Item -Path 'C:\OSDCloud' -Recurse -F
 If (Test-Path -Path 'C:\Drivers') { Remove-Item 'C:\Drivers' -Recurse -Force }
 Get-ChildItem 'C:\Windows\Temp' -Filter *membeer*  | Remove-Item -Force
 
+Remove-Item C:\Windows\Setup\Scripts\*.* -Exclude *.TAG -Force | Out-Null
+
 #=======================================================================
 #   Restart-Computer
 #=======================================================================
