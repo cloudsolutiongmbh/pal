@@ -11,10 +11,19 @@ $env:Path = $env:Path + ";C:\Program Files\WindowsPowerShell\Scripts"
 $Global:Transcript = "$((Get-Date).ToString('yyyy-MM-dd-HHmmss'))-Set-KeyboardLanguage.log"
 Start-Transcript -Path (Join-Path "$env:ProgramData\Microsoft\IntuneManagementExtension\Logs\OSD\" $Global:Transcript) -ErrorAction Ignore
 
+# Import International Modul
+ipmo international
+
 Write-Host -ForegroundColor Green "Install language packs"
-Install-Language -Language de-ch
-Install-Language -Language fr-ch
+Install-Language -Language de-de
+Install-Language -Language fr-fr
 Install-Language -Language en-US
+
+# Gebietsschema
+Set-WinSystemLocale de-CH
+
+# Sprache und Region, Setze auf de-CH (Switzerland 223)
+Set-WinHomeLocation -GeoId 0xDF
 
 Write-Host -ForegroundColor Green "Set keyboard language to de-CH"
 Start-Sleep -Seconds 5
