@@ -15,9 +15,9 @@ Start-Transcript -Path (Join-Path "$env:ProgramData\Microsoft\IntuneManagementEx
 ipmo international
 
 Write-Host -ForegroundColor Green "Install language packs"
-Install-Language -Language de-de
-Install-Language -Language fr-fr
-Install-Language -Language en-US
+Install-Language de-de
+Install-Language fr-fr
+Install-Language en-US
 
 # Gebietsschema
 Set-WinSystemLocale de-CH
