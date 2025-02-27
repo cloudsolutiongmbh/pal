@@ -109,7 +109,6 @@ Invoke-RestMethod https://raw.githubusercontent.com/cloudsolutiongmbh/pal/refs/h
 Invoke-RestMethod https://raw.githubusercontent.com/cloudsolutiongmbh/pal/refs/heads/main/prereq.ps1 | Out-File -FilePath 'C:\Windows\Setup\scripts\prereq.ps1' -Encoding ascii -Force
 Invoke-RestMethod https://raw.githubusercontent.com/cloudsolutiongmbh/pal/refs/heads/main/windows_update.ps1 | Out-File -FilePath 'C:\Windows\Setup\scripts\update.ps1' -Encoding ascii -Force
 Invoke-RestMethod https://raw.githubusercontent.com/cloudsolutiongmbh/pal/refs/heads/main/cleanlogs.ps1 | Out-File -FilePath 'C:\Windows\Setup\scripts\cleanlogs.ps1' -Encoding ascii -Force
-Write-DarkGrayHost "Copying PFX file & the import script"
 Copy-Item X:\OSDCloud\Config\Scripts C:\OSDCloud\ -Recurse -Force
 
 
