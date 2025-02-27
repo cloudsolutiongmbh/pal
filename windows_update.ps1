@@ -66,8 +66,6 @@ Set-ExecutionPolicy -ExecutionPolicy Bypass -Force
 Install-Script -Name Check-AutopilotPrerequisites -Force
 Check-AutopilotPrerequisites
 
-Stop-Transcript
-
 [CmdletBinding()]
 Param(
     [Parameter(Mandatory = $False)] [ValidateSet('Soft', 'Hard', 'None', 'Delayed')] [String] $Reboot = 'Soft',
