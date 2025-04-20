@@ -56,18 +56,6 @@ Param(
     [Parameter(Mandatory = $False)] [switch] $ExcludeUpdates
 )
 
-$Title = "Windows Update"
-$host.UI.RawUI.WindowTitle = $Title
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-[System.Net.WebRequest]::DefaultWebProxy.Credentials = [System.Net.CredentialCache]::DefaultCredentials
-$env:APPDATA = "C:\Windows\System32\Config\SystemProfile\AppData\Roaming"
-$env:LOCALAPPDATA = "C:\Windows\System32\Config\SystemProfile\AppData\Local"
-$Env:PSModulePath = $env:PSModulePath+";C:\Program Files\WindowsPowerShell\Scripts"
-$env:Path = $env:Path+";C:\Program Files\WindowsPowerShell\Scripts"
-
-$Global:Transcript = "$((Get-Date).ToString('yyyy-MM-dd-HHmmss'))-Windows-Update.log"
-Start-Transcript -Path (Join-Path "$env:ProgramData\Microsoft\IntuneManagementExtension\Logs\OSD\" $Global:Transcript) -ErrorAction Ignore
-
 Process {
 
     # If we are running as a 32-bit process on an x64 system, re-launch as a 64-bit process
@@ -83,6 +71,15 @@ Process {
             Exit $lastexitcode
         }
     }
+
+    $Title = "Windows Update"
+    $host.UI.RawUI.WindowTitle = $Title
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+    [System.Net.WebRequest]::DefaultWebProxy.Credentials = [System.Net.CredentialCache]::DefaultCredentials
+    $env:APPDATA = "C:\Windows\System32\Config\SystemProfile\AppData\Roaming"
+    $env:LOCALAPPDATA = "C:\Windows\System32\Config\SystemProfile\AppData\Local"
+    $Env:PSModulePath = $env:PSModulePath+";C:\Program Files\WindowsPowerShell\Scripts"
+    $env:Path = $env:Path+";C:\Program Files\WindowsPowerShell\Scripts"
 
     # Create a tag file just so Intune knows this was installed
     if (-not (Test-Path "$($env:ProgramData)\Microsoft\UpdateOS")) {
