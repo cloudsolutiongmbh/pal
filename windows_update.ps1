@@ -48,6 +48,14 @@ This script uses the Windows Update COM objects to install the latest cumulative
 .\UpdateOS.ps1
 #>
 
+[CmdletBinding()]
+Param(
+    [Parameter(Mandatory = $False)] [ValidateSet('Soft', 'Hard', 'None', 'Delayed')] [String] $Reboot = 'Soft',
+    [Parameter(Mandatory = $False)] [Int32] $RebootTimeout = 120,
+    [Parameter(Mandatory = $False)] [switch] $ExcludeDrivers,
+    [Parameter(Mandatory = $False)] [switch] $ExcludeUpdates
+)
+
 $Title = "Windows Update"
 $host.UI.RawUI.WindowTitle = $Title
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
@@ -59,15 +67,6 @@ $env:Path = $env:Path+";C:\Program Files\WindowsPowerShell\Scripts"
 
 $Global:Transcript = "$((Get-Date).ToString('yyyy-MM-dd-HHmmss'))-Windows-Update.log"
 Start-Transcript -Path (Join-Path "$env:ProgramData\Microsoft\IntuneManagementExtension\Logs\OSD\" $Global:Transcript) -ErrorAction Ignore
-
-
-[CmdletBinding()]
-Param(
-    [Parameter(Mandatory = $False)] [ValidateSet('Soft', 'Hard', 'None', 'Delayed')] [String] $Reboot = 'Soft',
-    [Parameter(Mandatory = $False)] [Int32] $RebootTimeout = 120,
-    [Parameter(Mandatory = $False)] [switch] $ExcludeDrivers,
-    [Parameter(Mandatory = $False)] [switch] $ExcludeUpdates
-)
 
 Process {
 
