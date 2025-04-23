@@ -31,8 +31,8 @@ $Global:MyOSDCloud = [ordered]@{
 #   [OS] Params and Start-OSDCloud
 #=======================================================================
 $Params = @{
-    OSVersion = "Windows 11"
-    OSBuild = "24H2"
+    OSVersion = "Windows 10"
+    OSBuild = "22H2"
     OSEdition = "Enterprise"
     OSLanguage = "de-de"
     OSLicense = "Volume"
