@@ -7,7 +7,14 @@ if ((Get-MyComputerModel) -match 'Virtual') {
 }
 
 Write-Host -ForegroundColor Green "Updating OSD PowerShell Module"
-Install-Module OSD -Force
+#Install-Module OSD -Force
+$Installed = Get-Module OSD -ListAvailable | Sort-Object Version -Descending | Select-Object -First 1
+$Online    = Find-Module OSD -ErrorAction SilentlyContinue
+if ($Online -and $Online.Version -gt $Installed.Version) {
+    Write-Host -ForegroundColor Green "Updating OSD Module $($Installed.Version) -> $($Online.Version)"
+    Install-Module OSD -Force
+}
+Import-Module OSD -Force
 
 Write-Host  -ForegroundColor Green "Importing OSD PowerShell Module"
 Import-Module OSD -Force
