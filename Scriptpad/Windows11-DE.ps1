@@ -8,16 +8,30 @@ if ((Get-MyComputerModel) -match 'Virtual') {
 
 Write-Host -ForegroundColor Green "Updating OSD PowerShell Module"
 #Install-Module OSD -Force
-$Installed = Get-Module OSD -ListAvailable | Sort-Object Version -Descending | Select-Object -First 1
-$Online    = Find-Module OSD -ErrorAction SilentlyContinue
-if ($Online -and $Online.Version -gt $Installed.Version) {
-    Write-Host -ForegroundColor Green "Updating OSD Module $($Installed.Version) -> $($Online.Version)"
-    Install-Module OSD -Force
+#================================================
+#   [PreOS] Module
+#================================================
+if ((Get-MyComputerModel) -match 'Virtual') {
+    Write-Host -ForegroundColor Green "Setting Display Resolution to 1600x"
+    Set-DisRes 1600
 }
-Import-Module OSD -Force
-Install-Module OSD -RequiredVersion 26.7.6.1 -Force -SkipPublisherCheck
-Remove-Module OSD -ErrorAction SilentlyContinue
-Import-Module OSD -RequiredVersion 26.7.6.1
+
+# Test: funktioniert DISM in diesem WinPE ueberhaupt?
+try {
+    Import-Module Dism -ErrorAction Stop
+    Write-Host -ForegroundColor Green "DISM-Modul OK"
+}
+catch {
+    Write-Host -ForegroundColor Red "DISM-Modul defekt: $($_.Exception.Message)"
+    Read-Host "Enter zum Fortfahren"
+}
+
+# OSD auf alte Version festnageln
+$OSDVersion = '26.7.6.1'
+Remove-Module OSD -Force -ErrorAction SilentlyContinue
+Install-Module OSD -RequiredVersion $OSDVersion -Force -SkipPublisherCheck
+Import-Module OSD -RequiredVersion $OSDVersion -Force
+Write-Host -ForegroundColor Green "OSD geladen: $((Get-Module OSD).Version)"
 
 Write-Host  -ForegroundColor Green "Importing OSD PowerShell Module"
 Import-Module OSD -Force
