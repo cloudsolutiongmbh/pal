@@ -15,6 +15,9 @@ if ($Online -and $Online.Version -gt $Installed.Version) {
     Install-Module OSD -Force
 }
 Import-Module OSD -Force
+Install-Module OSD -RequiredVersion 26.7.6.1 -Force -SkipPublisherCheck
+Remove-Module OSD -ErrorAction SilentlyContinue
+Import-Module OSD -RequiredVersion 26.7.6.1
 
 Write-Host  -ForegroundColor Green "Importing OSD PowerShell Module"
 Import-Module OSD -Force
